@@ -1,0 +1,385 @@
+<chat-agent.html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Solutions — Lead Finder Pro</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#0d0d1a;color:#e2e8f0;min-height:100vh}
+.hdr{background:linear-gradient(135deg,#6c63ff,#3b82f6);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.hl h1{color:#fff;font-size:15px;font-weight:700}.hl p{color:rgba(255,255,255,.75);font-size:11px}
+.hr{display:flex;align-items:center;gap:8px}
+.badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(239,68,68,.25);color:#f87171;cursor:pointer;border:none}
+.badge.ok{background:rgba(34,197,94,.2);color:#4ade80}
+.sbtn{background:rgba(255,255,255,.18);color:#fff;border:none;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12px}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 16px}
+.cbar{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:9px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cbar label{font-size:12px;color:#fbbf24;font-weight:600;white-space:nowrap}
+.cbar input{background:#12122a;border:1px solid rgba(251,191,36,.25);color:#e2e8f0;padding:7px 12px;border-radius:8px;font-size:13px;outline:none;flex:1;min-width:150px}
+.tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+.tb{background:#1a1a2e;color:#64748b;border:1px solid rgba(255,255,255,.07);padding:9px 15px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:all .2s}
+.tb.on{background:linear-gradient(135deg,#6c63ff,#3b82f6);color:#fff;border-color:transparent}
+.pan{display:none}.pan.on{display:block}
+.sc{background:#1a1a2e;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:18px;margin-bottom:16px}
+.sc h2{font-size:13px;font-weight:700;margin-bottom:14px;color:#c4b5fd}
+.fr{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.fg{display:flex;flex-direction:column;gap:5px;flex:1;min-width:130px}
+.fg label{font-size:11px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.fg input,.fg select{background:#12122a;border:1px solid rgba(255,255,255,.1);color:#e2e8f0;padding:9px 11px;border-radius:8px;font-size:13px;outline:none}
+.fg input:focus,.fg select:focus{border-color:#6c63ff}
+.fg input::placeholder{color:rgba(255,255,255,.25)}
+.fg select option{background:#1a1a2e}
+.go{background:linear-gradient(135deg,#6c63ff,#3b82f6);color:#fff;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;white-space:nowrap;height:38px;flex-shrink:0}
+.go:disabled{opacity:.5;cursor:not-allowed}
+.load{text-align:center;padding:40px;display:none}
+.sp{width:38px;height:38px;border:3px solid rgba(108,99,255,.2);border-top-color:#6c63ff;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load p{color:#94a3b8;font-size:13px}
+.stats{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.st{background:#1a1a2e;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:10px 14px;min-width:90px}
+.stn{font-size:20px;font-weight:800;color:#a78bfa}.stl{font-size:11px;color:#64748b}
+.rh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.rh h2{font-size:14px;font-weight:700}
+.eb{display:flex;gap:6px}
+.waexp{background:#25D366;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600}
+.csvexp{background:#f59e0b;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.lc{background:#1a1a2e;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px;position:relative;overflow:hidden;transition:border-color .2s}
+.lc:hover{border-color:rgba(108,99,255,.4)}
+.lc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#6c63ff,#3b82f6)}
+.lcn{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:8px}
+.lcname{font-size:13.5px;font-weight:700;line-height:1.3}
+.rtag{background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.25);font-size:10px;padding:2px 7px;border-radius:6px;font-weight:700;white-space:nowrap}
+.lci{font-size:12.5px;color:#94a3b8;line-height:1.9;margin-bottom:10px}
+.lci a{color:#818cf8;text-decoration:none}
+.lca{display:flex;gap:5px;flex-wrap:wrap}
+.wab{background:rgba(37,211,102,.12);color:#4ade80;border:1px solid rgba(37,211,102,.25);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:11.5px;font-weight:600}
+.cpb{background:rgba(108,99,255,.12);color:#a78bfa;border:1px solid rgba(108,99,255,.25);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:11.5px;font-weight:600}
+.lnb{background:rgba(59,130,246,.12);color:#60a5fa;border:1px solid rgba(59,130,246,.25);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:11.5px;font-weight:600}
+.schn{background:#1a1a2e;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px;margin-bottom:14px;font-size:13px;color:#94a3b8;line-height:1.7}
+.schn strong{color:#c4b5fd}
+.schl{background:#1a1a2e;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px}
+.si{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);gap:10px}
+.si:last-child{border:none}
+.si strong{font-size:13px;display:block}.si small{color:#64748b;font-size:11px}
+.sbadge{background:rgba(108,99,255,.15);color:#a78bfa;border:1px solid rgba(108,99,255,.3);padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;margin-left:6px}
+.delbtn{background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.25);padding:5px 9px;border-radius:6px;cursor:pointer;font-size:11px}
+.fetchbtn{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.25);padding:5px 9px;border-radius:6px;cursor:pointer;font-size:11px;margin-right:4px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px}
+.mbox{background:#1a1a2e;border-radius:16px;padding:24px;max-width:400px;width:100%;border:1px solid rgba(255,255,255,.1)}
+.mbox h2{font-size:15px;font-weight:700;margin-bottom:16px;color:#c4b5fd}
+.mfg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.mfg label{font-size:12px;color:#94a3b8;font-weight:600}
+.mfg input{background:#12122a;border:1px solid rgba(255,255,255,.1);color:#e2e8f0;padding:9px 12px;border-radius:8px;font-size:13px;outline:none}
+.mfg input:focus{border-color:#6c63ff}
+.mbtns{display:flex;gap:8px;margin-top:14px}
+.savebtn{background:linear-gradient(135deg,#6c63ff,#3b82f6);color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;flex:1}
+.canbtn{background:rgba(255,255,255,.07);color:#94a3b8;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-size:13px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#252544;color:#e2e8f0;padding:10px 20px;border-radius:30px;font-size:13px;z-index:9999;border:1px solid rgba(108,99,255,.4);display:none}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hl"><h1>🎯 Smart Solutions — Lead Finder Pro</h1><p>Apify Powered • Google Maps • Instagram • LinkedIn</p></div>
+  <div class="hr">
+    <button class="badge" id="badge" onclick="openSet()">🔑 API Required</button>
+    <button class="sbtn" onclick="openSet()">⚙️ Settings</button>
+  </div>
+</div>
+<div class="wrap">
+  <div class="cbar">
+    <label>👤 Client Name (Optional):</label>
+    <input type="text" id="cname" placeholder="Client ka naam (report mein shamil hoga)" />
+  </div>
+  <div class="tabs">
+    <button class="tb on" data-t="g" onclick="sw('g')">📍 Google Maps</button>
+    <button class="tb" data-t="ig" onclick="sw('ig')">📸 Instagram</button>
+    <button class="tb" data-t="li" onclick="sw('li')">💼 LinkedIn</button>
+    <button class="tb" data-t="sch" onclick="sw('sch')">⏰ Auto Leads</button>
+  </div>
+
+  <!-- Google Maps -->
+  <div class="pan on" id="pan-g">
+    <div class="sc"><h2>📍 Google Maps — Local Business Leads</h2>
+      <div class="fr">
+        <div class="fg"><label>Business Type</label><input type="text" id="g-kw" placeholder="restaurant, pharmacy, gym, clothing..."/></div>
+        <div class="fg"><label>City / Location</label><input type="text" id="g-loc" placeholder="Lahore, Karachi, Islamabad..."/></div>
+        <div class="fg" style="max-width:110px"><label>Count</label>
+          <select id="g-cnt"><option value="10">10</option><option value="20" selected>20</option><option value="30">30</option><option value="50">50</option></select>
+        </div>
+        <button class="go" onclick="searchG()">🚀 Leads Lo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instagram -->
+  <div class="pan" id="pan-ig">
+    <div class="sc"><h2>📸 Instagram — Business Profiles</h2>
+      <div class="fr">
+        <div class="fg"><label>Hashtag</label><input type="text" id="ig-tag" placeholder="#LahoreBusiness, #KarachiFashion..."/></div>
+        <div class="fg" style="max-width:160px"><label>Type</label>
+          <select id="ig-type"><option value="profiles">Business Profiles</option><option value="posts">Posts</option></select>
+        </div>
+        <div class="fg" style="max-width:110px"><label>Count</label>
+          <select id="ig-cnt"><option value="10">10</option><option value="20" selected>20</option><option value="30">30</option></select>
+        </div>
+        <button class="go" onclick="searchIG()">🚀 Leads Lo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LinkedIn -->
+  <div class="pan" id="pan-li">
+    <div class="sc"><h2>💼 LinkedIn — Company Leads</h2>
+      <div class="fr">
+        <div class="fg"><label>Industry / Keyword</label><input type="text" id="li-kw" placeholder="digital marketing, real estate, fashion..."/></div>
+        <div class="fg"><label>Location</label><input type="text" id="li-loc" placeholder="Pakistan, Lahore (optional)"/></div>
+        <div class="fg" style="max-width:110px"><label>Count</label>
+          <select id="li-cnt"><option value="10">10</option><option value="20" selected>20</option></select>
+        </div>
+        <button class="go" onclick="searchLI()">🚀 Leads Lo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auto Scheduler -->
+  <div class="pan" id="pan-sch">
+    <div class="sc"><h2>⏰ Auto Daily Leads — Schedule Banao</h2>
+      <div class="fr">
+        <div class="fg"><label>Platform</label>
+          <select id="s-pl"><option value="google">📍 Google Maps</option><option value="instagram">📸 Instagram</option><option value="linkedin">💼 LinkedIn</option></select>
+        </div>
+        <div class="fg"><label>Keyword / Hashtag</label><input type="text" id="s-kw" placeholder="restaurant / #LahoreBusiness..."/></div>
+        <div class="fg"><label>Location</label><input type="text" id="s-loc" placeholder="Lahore (Instagram ke liye optional)"/></div>
+        <div class="fg" style="max-width:110px"><label>Count</label>
+          <select id="s-cnt"><option value="10">10</option><option value="20" selected>20</option></select>
+        </div>
+        <div class="fg" style="max-width:120px"><label>Daily Time</label><input type="time" id="s-time" value="09:00"/></div>
+        <button class="go" onclick="createSch()">➕ Schedule</button>
+      </div>
+    </div>
+    <div class="schn"><strong>Kaise kaam karta hai:</strong><br>
+      1. Form bharo → Schedule dabao → Apify pe cron job ban jaata hai<br>
+      2. Har roz us waqt Apify automatically leads dhoondhe ga<br>
+      3. "Fetch" button se latest results yahan dekho
+    </div>
+    <div class="schl" id="schl"><p style="color:#64748b;font-size:13px;text-align:center;padding:16px">Abhi koi schedule nahi hai.</p></div>
+  </div>
+
+  <div class="load" id="load"><div class="sp"></div><p id="ltxt">Loading...</p></div>
+
+  <!-- Results -->
+  <div id="res" style="display:none">
+    <div class="stats">
+      <div class="st"><div class="stn" id="stot">0</div><div class="stl">Total Leads</div></div>
+      <div class="st"><div class="stn" id="sph">0</div><div class="stl">Phones</div></div>
+      <div class="st"><div class="stn" id="sweb">0</div><div class="stl">Websites</div></div>
+      <div class="st"><div class="stn" id="sem">0</div><div class="stl">Emails</div></div>
+    </div>
+    <div class="rh">
+      <h2 id="rtitle">Results</h2>
+      <div class="eb">
+        <button class="waexp" onclick="expWA()">📱 WhatsApp Report</button>
+        <button class="csvexp" onclick="expCSV()">📥 CSV Download</button>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal" id="smod">
+  <div class="mbox">
+    <h2>⚙️ Settings</h2>
+    <div class="mfg"><label>🔑 Apify API Key</label><input type="password" id="akey" placeholder="apify_api_xxxxxxxxxxxxxxxx"/></div>
+    <div class="mfg"><label>📱 Aapka WhatsApp Number</label><input type="text" id="wano" placeholder="923163792412"/></div>
+    <small style="color:#64748b;font-size:12px">apify.com → Sign Up → Settings → API Key ($5 free/month)</small>
+    <div class="mbtns">
+      <button class="canbtn" onclick="closeSt()">Cancel</button>
+      <button class="savebtn" onclick="saveSt()">✅ Save</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let key=localStorage.getItem('ss_k')||'',wa=localStorage.getItem('ss_w')||'923163792412';
+let leads=[],scheds=JSON.parse(localStorage.getItem('ss_s')||'[]');
+const $=id=>document.getElementById(id);
+const fmtN=n=>!n?'':n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3).toFixed(1)+'K':String(n);
+
+window.onload=()=>{
+  if(key){$('akey').value=key;setBadge(true);}
+  $('wano').value=wa;
+  renderScheds();
+};
+
+function setBadge(ok){$('badge').textContent=ok?'✅ Connected':'🔑 API Required';$('badge').className=ok?'badge ok':'badge';}
+function saveSt(){const k=$('akey').value.trim();if(!k){toast('❌ API Key likhein!');return;}key=k;wa=$('wano').value.trim()||'923163792412';localStorage.setItem('ss_k',key);localStorage.setItem('ss_w',wa);setBadge(true);closeSt();toast('✅ Settings save ho gayi!');}
+function sw(t){document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));document.querySelectorAll('.pan').forEach(p=>p.classList.remove('on'));document.querySelector('[data-t="'+t+'"]').classList.add('on');$('pan-'+t).classList.add('on');leads=[];$('res').style.display='none';}
+function chk(){if(!key){toast('❌ Settings mein Apify API Key lagaein!');openSet();return false;}return true;}
+function openSet(){$('smod').style.display='flex';}
+function closeSt(){$('smod').style.display='none';}
+function showL(msg){$('ltxt').textContent=msg;$('load').style.display='block';$('res').style.display='none';}
+function hideL(){$('load').style.display='none';}
+
+async function apify(actor,input){
+  const r=await fetch('https://api.apify.com/v2/acts/'+actor.replace('/','~')+'/run-sync-get-dataset-items?token='+key+'&timeout=120&memory=256',
+    {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(input)});
+  if(!r.ok)throw new Error('Apify Error '+r.status+' — API key check karein ya free credits dekho');
+  return r.json();
+}
+
+async function searchG(){
+  if(!chk())return;
+  const kw=$('g-kw').value.trim(),loc=$('g-loc').value.trim(),cnt=+$('g-cnt').value;
+  if(!kw||!loc){toast('❌ Keyword aur location likhein!');return;}
+  showL('📍 Google Maps se leads dhoondh raha hoon... ⏳');
+  try{
+    const data=await apify('compass/crawler-google-places',{searchStringsArray:[`${kw} in ${loc}`],maxCrawledPlacesPerSearch:cnt,language:'en',maxImages:0,maxReviews:0});
+    leads=data.filter(p=>p.title);
+    showRes(`📍 Google Maps: ${kw} in ${loc}`,'g');
+  }catch(e){hideL();toast('❌ '+e.message);}
+}
+
+async function searchIG(){
+  if(!chk())return;
+  const tag=$('ig-tag').value.trim().replace('#',''),type=$('ig-type').value,cnt=+$('ig-cnt').value;
+  if(!tag){toast('❌ Hashtag likhein!');return;}
+  showL('📸 Instagram se profiles dhoondh raha hoon... ⏳');
+  try{
+    const raw=await apify('apify/instagram-scraper',{resultsType:type,searchHashtags:[tag],maxRequestsPerCrawl:cnt,maxResults:cnt});
+    leads=raw.filter(p=>p.username||p.fullName).map(p=>({_t:'ig',title:p.fullName||p.username,username:p.username,followers:p.followersCount,bio:p.biography,phone:p.businessPhoneNumber,email:p.businessEmail,website:p.externalUrl,category:p.businessCategoryName}));
+    showRes(`📸 Instagram: #${tag}`,'ig');
+  }catch(e){hideL();toast('❌ '+e.message);}
+}
+
+async function searchLI(){
+  if(!chk())return;
+  const kw=$('li-kw').value.trim(),loc=$('li-loc').value.trim(),cnt=+$('li-cnt').value;
+  if(!kw){toast('❌ Keyword likhein!');return;}
+  showL('💼 LinkedIn se companies dhoondh raha hoon... ⏳');
+  try{
+    const sUrl=`https://www.linkedin.com/search/results/companies/?keywords=${encodeURIComponent(kw+(loc?' '+loc:''))}&origin=SWITCH_SEARCH_VERTICAL`;
+    const raw=await apify('chaberlini/linkedin-company-scraper',{searchUrl:sUrl,maxResults:cnt});
+    leads=raw.map(c=>({_t:'li',title:c.name||c.companyName,industry:c.industry,website:c.website,followers:c.followerCount,employees:c.staffCount,linkedin:c.url||c.linkedInUrl}));
+    showRes(`💼 LinkedIn: ${kw}`,'li');
+  }catch(e){hideL();toast('❌ '+e.message+' (LinkedIn cookie needed — README dekhen)');}
+}
+
+async function createSch(){
+  if(!chk())return;
+  const pl=$('s-pl').value,kw=$('s-kw').value.trim(),loc=$('s-loc').value.trim(),cnt=+$('s-cnt').value,time=$('s-time').value||'09:00';
+  if(!kw){toast('❌ Keyword likhein!');return;}
+  const [hr,mn]=time.split(':');
+  const cron=`${mn} ${hr} * * *`;
+  let actorId,runInput;
+  if(pl==='google'){actorId='compass/crawler-google-places';runInput={searchStringsArray:[kw+(loc?' in '+loc:'')],maxCrawledPlacesPerSearch:cnt,language:'en',maxImages:0};}
+  else if(pl==='instagram'){actorId='apify/instagram-scraper';runInput={resultsType:'profiles',searchHashtags:[kw.replace('#','')],maxRequestsPerCrawl:cnt};}
+  else{actorId='chaberlini/linkedin-company-scraper';runInput={searchUrl:`https://www.linkedin.com/search/results/companies/?keywords=${encodeURIComponent(kw+(loc?' '+loc:''))}`,maxResults:cnt};}
+  toast('⏳ Schedule ban raha hai...');
+  try{
+    const r=await fetch(`https://api.apify.com/v2/schedules?token=${key}`,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:`ss-${pl}-${Date.now()}`,cronExpression:cron,isEnabled:true,description:`Smart Solutions: ${kw}`,
+        actions:[{type:'RUN_ACTOR',actorId,runInput:JSON.stringify(runInput),runOptions:{memory:256,timeout:120}}]})});
+    const d=await r.json();
+    scheds.push({id:d.data.id,pl,kw,loc,time,actorId,created:new Date().toLocaleString()});
+    localStorage.setItem('ss_s',JSON.stringify(scheds));
+    renderScheds();
+    toast(`✅ Schedule ready! Har roz ${time} pe leads aayengi.`);
+  }catch(e){toast('❌ Schedule error: '+e.message);}
+}
+
+async function fetchRes(actorId,idx){
+  if(!chk())return;
+  toast('⏳ Latest results fetch ho rahe hain...');
+  try{
+    const r=await fetch(`https://api.apify.com/v2/acts/${actorId.replace('/','~')}/runs?token=${key}&limit=1&desc=1`);
+    const d=await r.json();
+    if(!d.data?.items?.length){toast('😕 Abhi koi results nahi hain.');return;}
+    const dsId=d.data.items[0].defaultDatasetId;
+    leads=await(await fetch(`https://api.apify.com/v2/datasets/${dsId}/items?token=${key}`)).json();
+    const s=scheds[idx];
+    showRes(`⏰ ${s.kw}`,s.pl==='ig'?'ig':s.pl==='li'?'li':'g');
+  }catch(e){toast('❌ '+e.message);}
+}
+
+function delSch(id,idx){
+  fetch(`https://api.apify.com/v2/schedules/${id}?token=${key}`,{method:'DELETE'}).catch(()=>{});
+  scheds.splice(idx,1);localStorage.setItem('ss_s',JSON.stringify(scheds));renderScheds();toast('🗑 Schedule delete ho gaya');
+}
+
+function renderScheds(){
+  const el=$('schl');
+  if(!scheds.length){el.innerHTML='<p style="color:#64748b;font-size:13px;text-align:center;padding:16px">Abhi koi schedule nahi hai.</p>';return;}
+  const ic={google:'📍',instagram:'📸',linkedin:'💼'};
+  el.innerHTML=scheds.map((s,i)=>`<div class="si"><div><strong>${ic[s.pl]||'🎯'} ${s.kw}${s.loc?' in '+s.loc:''}<span class="sbadge">${s.pl}</span></strong><small>⏰ Har roz ${s.time} pe • ${s.created}</small></div><div style="display:flex;gap:5px;flex-shrink:0"><button class="fetchbtn" onclick="fetchRes('${s.actorId}',${i})">📥 Fetch</button><button class="delbtn" onclick="delSch('${s.id}',${i})">🗑</button></div></div>`).join('');
+}
+
+function showRes(title,type){
+  hideL();
+  if(!leads.length){toast('😕 Koi leads nahi mili. Keyword ya location change karein.');return;}
+  let ph=0,web=0,em=0;
+  leads.forEach(l=>{if(l.phone||l.businessPhoneNumber)ph++;if(l.website||l.externalUrl)web++;if(l.email||l.businessEmail)em++;});
+  $('stot').textContent=leads.length;$('sph').textContent=ph;$('sweb').textContent=web;$('sem').textContent=em;
+  $('rtitle').textContent=`${title} — ${leads.length} leads mili!`;
+  $('res').style.display='block';
+  $('grid').innerHTML=leads.map((l,i)=>buildCard(l,i,type)).join('');
+  $('res').scrollIntoView({behavior:'smooth'});
+}
+
+function buildCard(l,i,t){
+  const n=i+1;
+  if(t==='ig') return `<div class="lc"><div class="lcn"><div class="lcname">${n}. ${l.title||l.username||''}</div>${l.followers?`<span class="rtag">👥 ${fmtN(l.followers)}</span>`:''}</div><div class="lci">${l.category?`🏷 ${l.category}<br>`:''}${l.username?`📸 @${l.username}<br>`:''}${l.email?`📧 ${l.email}<br>`:''}${l.phone?`📞 ${l.phone}<br>`:''}${l.bio?`<span style="font-size:11.5px;color:#64748b">${l.bio.substring(0,80)}...</span>`:''}</div><div class="lca">${l.username?`<button class="lnb" onclick="window.open('https://instagram.com/${l.username}','_blank')">📸 Profile</button>`:''} ${l.phone?`<button class="wab" onclick="waMsg('${l.phone}','${(l.title||'').replace(/'/g,"\\'")}')">📱 WA</button>`:''}<button class="cpb" onclick="cpL(${i})">📋 Copy</button></div></div>`;
+  if(t==='li') return `<div class="lc"><div class="lcn"><div class="lcname">${n}. ${l.title||''}</div>${l.followers?`<span class="rtag">👥 ${fmtN(l.followers)}</span>`:''}</div><div class="lci">${l.industry?`🏭 ${l.industry}<br>`:''}${l.employees?`👤 ${l.employees} employees<br>`:''}${l.website?`🌐 <a href="${l.website}" target="_blank">${l.website.replace(/https?:\/\/(www\.)?/,'').substring(0,35)}</a><br>`:''}${l.linkedin?`💼 <a href="${l.linkedin}" target="_blank">LinkedIn Profile</a>`:''}</div><div class="lca">${l.linkedin?`<button class="lnb" onclick="window.open('${l.linkedin}','_blank')">💼 View</button>`:''}<button class="cpb" onclick="cpL(${i})">📋 Copy</button></div></div>`;
+  return `<div class="lc"><div class="lcn"><div class="lcname">${n}. ${l.title||''}</div>${l.totalScore?`<span class="rtag">⭐ ${l.totalScore.toFixed(1)}</span>`:''}</div><div class="lci">${l.categoryName?`🏷 ${l.categoryName}<br>`:''}${l.address?`📍 ${l.address}<br>`:''}${l.phone?`📞 ${l.phone}<br>`:''}${l.website?`🌐 <a href="${l.website}" target="_blank">${l.website.replace(/https?:\/\/(www\.)?/,'').substring(0,35)}</a>`:''}</div><div class="lca">${l.phone?`<button class="wab" onclick="waMsg('${l.phone}','${(l.title||'').replace(/'/g,"\\'")}')">📱 WA</button>`:''}<button class="cpb" onclick="cpL(${i})">📋 Copy</button></div></div>`;
+}
+
+function waMsg(phone,name){
+  const clean=phone.replace(/[\s\-\(\)]/g,'');
+  const num=clean.startsWith('+')?clean:'+92'+clean.replace(/^0/,'');
+  const msg=encodeURIComponent(`Assalam o Alaikum ${name}!\n\nMain Muhammad Imran hoon — Smart Solutions & Store se.\n\nAapki digital growth mein madad karna chahta hoon.\n\nMeta Ads | SEO | Web Development\n\n🌐 smart-solution.services`);
+  window.open(`https://wa.me/${num}?text=${msg}`,'_blank');
+}
+
+function cpL(i){
+  const l=leads[i];
+  const txt=Object.entries(l).filter(([k,v])=>k!=='_t'&&v).map(([k,v])=>`${k}: ${v}`).join('\n');
+  navigator.clipboard.writeText(txt).then(()=>toast('✅ Copy ho gaya!'));
+}
+
+function expWA(){
+  if(!leads.length)return;
+  const client=$('cname').value;
+  let msg=`🎯 *LEAD REPORT — Smart Solutions*\n`;
+  if(client)msg+=`👤 Client: ${client}\n`;
+  msg+=`📊 Total: ${leads.length} leads\n\n`;
+  leads.slice(0,15).forEach((l,i)=>{
+    msg+=`*${i+1}. ${l.title||l.username||''}*\n`;
+    if(l.phone)msg+=`📞 ${l.phone}\n`;
+    if(l.email||l.businessEmail)msg+=`📧 ${l.email||l.businessEmail}\n`;
+    if(l.website||l.externalUrl)msg+=`🌐 ${l.website||l.externalUrl}\n`;
+    msg+='\n';
+  });
+  if(leads.length>15)msg+=`...aur ${leads.length-15} leads. CSV download karein.`;
+  window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+function expCSV(){
+  if(!leads.length)return;
+  const keys=[...new Set(leads.flatMap(l=>Object.keys(l)))].filter(k=>k!=='_t');
+  const rows=[keys,...leads.map(l=>keys.map(k=>`"${String(l[k]||'').replace(/"/g,"'")}"` ))];
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(rows.map(r=>r.join(',')).join('\n'));
+  a.download=`leads-${Date.now()}.csv`;a.click();
+  toast('✅ CSV download ho gaya!');
+}
+
+function toast(msg){
+  const t=$('toast');t.textContent=msg;t.style.display='block';
+  clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3500);
+}
+</script>
+</body>
+</html>

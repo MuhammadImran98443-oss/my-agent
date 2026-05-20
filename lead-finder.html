@@ -1,0 +1,113 @@
+<lead-finder.html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Solutions Assistant</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.wrap{width:100%;max-width:460px;background:#1a1a2e;border-radius:20px;box-shadow:0 25px 60px rgba(0,0,0,.5);overflow:hidden;display:flex;flex-direction:column;height:88vh;max-height:680px;border:1px solid rgba(255,255,255,.08)}
+.hdr{background:linear-gradient(135deg,#6c63ff,#3b82f6);padding:15px 18px;display:flex;align-items:center;gap:10px}
+.av{width:42px;height:42px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.hi h3{color:#fff;font-size:14px;font-weight:700}.hi p{color:rgba(255,255,255,.75);font-size:11px}
+.dot{width:7px;height:7px;background:#22c55e;border-radius:50%;display:inline-block;margin-right:4px}
+.msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth}
+.msgs::-webkit-scrollbar{width:3px}.msgs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
+.m{max-width:83%;padding:9px 13px;border-radius:14px;font-size:13.5px;line-height:1.55;animation:fi .3s ease;white-space:pre-wrap}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.m.bot{background:#252544;color:#e2e8f0;border-bottom-left-radius:3px;align-self:flex-start;border:1px solid rgba(255,255,255,.06)}
+.m.usr{background:linear-gradient(135deg,#6c63ff,#3b82f6);color:#fff;border-bottom-right-radius:3px;align-self:flex-end}
+.typ{display:flex;align-items:center;gap:5px;background:#252544;padding:10px 14px;border-radius:14px;border-bottom-left-radius:3px;align-self:flex-start;border:1px solid rgba(255,255,255,.06)}
+.typ span{width:6px;height:6px;background:#6c63ff;border-radius:50%;animation:bo 1.2s infinite}
+.typ span:nth-child(2){animation-delay:.2s}.typ span:nth-child(3){animation-delay:.4s}
+@keyframes bo{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.opts{display:flex;flex-wrap:wrap;gap:7px;padding:3px 0 7px;align-self:flex-start}
+.ob{background:rgba(108,99,255,.15);color:#a78bfa;border:1px solid rgba(108,99,255,.4);padding:6px 13px;border-radius:18px;cursor:pointer;font-size:12.5px;transition:all .2s}
+.ob:hover{background:rgba(108,99,255,.35);color:#fff}
+.lgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:3px 0 7px;align-self:flex-start;width:240px}
+.lb{background:rgba(255,255,255,.05);color:#e2e8f0;border:1px solid rgba(255,255,255,.1);padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;transition:all .2s;text-align:left}
+.lb:hover{background:rgba(108,99,255,.25);border-color:#6c63ff;color:#fff}
+.ia{padding:10px 14px;background:#12122a;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:7px;align-items:center}
+.ia input{flex:1;background:#252544;border:1px solid rgba(255,255,255,.1);color:#e2e8f0;padding:9px 13px;border-radius:18px;font-size:13px;outline:none}
+.ia input:focus{border-color:#6c63ff}
+.ia input::placeholder{color:rgba(255,255,255,.25)}
+.sndb{width:38px;height:38px;background:linear-gradient(135deg,#6c63ff,#3b82f6);border:none;border-radius:50%;color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lcard{background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(59,130,246,.12));border:1px solid rgba(34,197,94,.3);border-radius:10px;padding:11px;font-size:12px;color:#86efac;align-self:flex-start;max-width:90%}
+.lcard strong{color:#4ade80;display:block;margin-bottom:5px;font-size:12.5px}
+.abtns{display:flex;gap:7px;flex-wrap:wrap;padding:3px 0 7px;align-self:flex-start}
+.wabtn{background:#25D366;color:#fff;border:none;padding:8px 14px;border-radius:18px;cursor:pointer;font-size:12.5px;font-weight:700}
+.prog{padding:7px 14px 0;display:flex;gap:4px}
+.pd{height:3px;flex:1;background:rgba(255,255,255,.08);border-radius:2px;transition:background .4s}
+.pd.on{background:#6c63ff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="av">🤖</div>
+    <div class="hi"><h3>Smart Solutions Assistant</h3><p><span class="dot"></span>Online — Muhammad Imran ki Team</p></div>
+  </div>
+  <div class="prog" id="prog">
+    <div class="pd" id="p0"></div><div class="pd" id="p1"></div><div class="pd" id="p2"></div>
+    <div class="pd" id="p3"></div><div class="pd" id="p4"></div><div class="pd" id="p5"></div><div class="pd" id="p6"></div>
+  </div>
+  <div class="msgs" id="msgs"></div>
+  <div class="ia">
+    <input type="text" id="inp" placeholder="Type here..." disabled/>
+    <button class="sndb" onclick="send()">➤</button>
+  </div>
+</div>
+
+<script>
+const m=document.getElementById('msgs'),inp=document.getElementById('inp');
+let lead={name:'',service:'',goal:'',budget:'',phone:'',email:'',lang:''},step=0,sc=null;
+
+const S={
+  en:{g:`👋 Hi! I'm Smart Solutions' Digital Assistant.\n\nI help businesses grow online! 🚀\n\nFirst — what's your name?`,name:n=>`Nice to meet you, ${n}! 😊\n\nWhich service are you looking for?`,svc:s=>`${s} — excellent choice! 💪\n\nWhat do you want to achieve? What's the main problem?`,goal:()=>`Got it! What's your monthly budget?`,budget:()=>`Perfect! What's your WhatsApp number? (Muhammad Imran will contact you personally)`,phone:()=>`Thank you! Last one — what's your email address?`,done:n=>`Amazing, ${n}! 🎉\n\nMuhammad Imran will contact you very soon!`,svcs:['Meta Ads 📢','SEO 🔍','Web Development 💻','Video Editing 🎬','Graphic Design 🎨','All Services 🚀'],buds:['5k-15k PKR','15k-30k PKR','30k-60k PKR','60k+ PKR']},
+  ru:{g:`👋 Assalam o Alaikum! Main Smart Solutions ka Digital Assistant hoon.\n\nAapki business grow karna chahta hoon! 🚀\n\nAapka naam kya hai?`,name:n=>`${n} — khoobsurat naam! 😊\n\nKonsi service chahiye?`,svc:s=>`${s} — zabardast! 💪\n\nIs se kya hasil karna chahte hain? Kya masla solve karna hai?`,goal:()=>`Samajh gaya! Budget kitna hai?`,budget:()=>`Theek hai! WhatsApp number kya hai? (Muhammad Imran khud contact karenge)`,phone:()=>`Shukriya! Email address bataiye?`,done:n=>`Waah ${n}! 🎉\n\nMuhammad Imran jald hi aapse rabta karenge!`,svcs:['Meta Ads 📢','SEO 🔍','Web Development 💻','Video Editing 🎬','Graphic Design 🎨','Sab Chahiye 🚀'],buds:['5k-15k PKR','15k-30k PKR','30k-60k PKR','60k+ PKR']},
+  ur:{g:`👋 السلام علیکم! میں سمارٹ سولوشنز کا ڈیجیٹل اسسٹنٹ ہوں۔\n\nآپ کی بزنس گروتھ میں مدد کرنا چاہتا ہوں! 🚀\n\nآپ کا نام کیا ہے؟`,name:n=>`${n} — بہت اچھا نام! 😊\n\nکون سی سروس چاہتے ہیں؟`,svc:s=>`${s} — زبردست! 💪\n\nاس سے کیا حاصل کرنا ہے؟`,goal:()=>`سمجھ گیا! ماہانہ بجٹ کتنا ہے؟`,budget:()=>`ٹھیک ہے! واٹس ایپ نمبر کیا ہے؟`,phone:()=>`شکریہ! ای میل ایڈریس؟`,done:n=>`واہ ${n}! 🎉\n\nمحمد عمران جلد رابطہ کریں گے!`,svcs:['Meta Ads 📢','SEO 🔍','Web Development 💻','Video Editing 🎬','Graphic Design 🎨','سب چاہیے 🚀'],buds:['5k-15k PKR','15k-30k PKR','30k-60k PKR','60k+ PKR']},
+  hi:{g:`👋 नमस्ते! मैं Smart Solutions का Digital Assistant हूं।\n\nआपका बिजनेस grow करना चाहता हूं! 🚀\n\nआपका नाम क्या है?`,name:n=>`${n} — बढ़िया नाम! 😊\n\nकौन सी service चाहिए?`,svc:s=>`${s} — excellent! 💪\n\nइससे क्या हासिल करना है?`,goal:()=>`समझ गया! Monthly budget कितना है?`,budget:()=>`ठीक है! WhatsApp number क्या है?`,phone:()=>`शुक्रिया! Email address?`,done:n=>`वाह ${n}! 🎉\n\nMuhammad Imran जल्द contact करेंगे!`,svcs:['Meta Ads 📢','SEO 🔍','Web Development 💻','Video Editing 🎬','Graphic Design 🎨','सब चाहिए 🚀'],buds:['5k-15k PKR','15k-30k PKR','30k-60k PKR','60k+ PKR']}
+};
+
+const updP=s=>{for(let i=0;i<7;i++)document.getElementById('p'+i)?.classList.toggle('on',i<=s);};
+const addMsg=(txt,t,d=0)=>new Promise(r=>setTimeout(()=>{const el=document.createElement('div');el.className='m '+t;el.innerText=txt;m.appendChild(el);m.scrollTop=m.scrollHeight;r();},d));
+function typing(dur=1000){return new Promise(r=>{const t=document.createElement('div');t.className='typ';t.id='typ';t.innerHTML='<span></span><span></span><span></span>';m.appendChild(t);m.scrollTop=m.scrollHeight;setTimeout(()=>{document.getElementById('typ')?.remove();r();},dur);});}
+function addOpts(opts,cb){const d=document.createElement('div');d.className='opts';d.id='opts';opts.forEach(o=>{const b=document.createElement('button');b.className='ob';b.innerText=o;b.onclick=()=>{d.remove();cb(o);};d.appendChild(b);});m.appendChild(d);m.scrollTop=m.scrollHeight;}
+function showLangPicker(){
+  const intro=document.createElement('div');intro.className='m bot';intro.innerText='👋 Welcome to Smart Solutions!\n\nPlease choose your language:';m.appendChild(intro);
+  const g=document.createElement('div');g.className='lgrid';
+  [{code:'en',label:'🇬🇧 English'},{code:'ru',label:'🇵🇰 Roman Urdu'},{code:'ur',label:'📝 اردو'},{code:'hi',label:'🇮🇳 हिंदी'}].forEach(l=>{
+    const b=document.createElement('button');b.className='lb';b.innerHTML=l.label;
+    b.onclick=()=>{g.remove();startChat(l.code);};g.appendChild(b);
+  });m.appendChild(g);m.scrollTop=m.scrollHeight;
+}
+async function startChat(lang){lead.lang=lang;sc=S[lang];await addMsg(sc.g,'bot');step=1;enInp(true);}
+function enInp(on){inp.disabled=!on;if(on)inp.focus();}
+async function handle(val){
+  enInp(false);await addMsg(val,'usr');
+  if(step===1){lead.name=val;await typing(900);await addMsg(sc.name(lead.name),'bot');step=2;addOpts(sc.svcs,async s=>{lead.service=s;await addMsg(s,'usr');await typing(900);await addMsg(sc.svc(lead.service),'bot');step=3;enInp(true);});}
+  else if(step===3){lead.goal=val;await typing(900);await addMsg(sc.goal(),'bot');step=4;addOpts(sc.buds,async b=>{lead.budget=b;await addMsg(b,'usr');await typing(900);await addMsg(sc.budget(),'bot');step=5;enInp(true);});}
+  else if(step===5){lead.phone=val;await typing(800);await addMsg(sc.phone(),'bot');step=6;enInp(true);}
+  else if(step===6){lead.email=val;await typing(1100);await showDone();step=7;updP(7);}
+  else enInp(true);
+}
+async function showDone(){
+  updP(6);
+  const lN={en:'English',ru:'Roman Urdu',ur:'Urdu',hi:'Hindi'};
+  const c=document.createElement('div');c.className='lcard';
+  c.innerHTML=`<strong>✅ Naya Lead!</strong>👤 ${lead.name}<br>🌐 ${lN[lead.lang]}<br>🛠 ${lead.service}<br>🎯 ${lead.goal}<br>💰 ${lead.budget}<br>📱 ${lead.phone}<br>📧 ${lead.email}`;
+  m.appendChild(c);
+  await addMsg(sc.done(lead.name),'bot');
+  const waMsg=`🌟 *NAYA LEAD — Smart Solutions*\n\n👤 Naam: ${lead.name}\n🌐 Zaban: ${lN[lead.lang]}\n🛠 Service: ${lead.service}\n🎯 Goal: ${lead.goal}\n💰 Budget: ${lead.budget}\n📱 WhatsApp: ${lead.phone}\n📧 Email: ${lead.email}\n\n✅ Smart Solutions website se aaya hai!\nJaldi contact karein 🚀`;
+  const bt=document.createElement('div');bt.className='abtns';
+  const wb=document.createElement('button');wb.className='wabtn';wb.innerHTML='📱 WhatsApp pe Bhejo';
+  wb.onclick=()=>window.open(`https://wa.me/923163792412?text=${encodeURIComponent(waMsg)}`,'_blank');
+  bt.appendChild(wb);m.appendChild(bt);m.scrollTop=m.scrollHeight;
+}
+function send(){const v=inp.value.trim();if(!v||inp.disabled)return;inp.value='';handle(v);}
+inp.addEventListener('keydown',e=>{if(e.key==='Enter')send();});
+setTimeout(showLangPicker,400);
+</script>
+</body>
+</html>
